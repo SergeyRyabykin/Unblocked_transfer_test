@@ -1,0 +1,8 @@
+*.elf
+*.hex
+*.map
+*.asm
+build/
+test-lib/
+test-obj/
+*.exe
