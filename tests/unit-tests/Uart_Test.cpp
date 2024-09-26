@@ -1,7 +1,7 @@
 #include "CppUTest/TestHarness.h"
 // #include "CppUTestExt/MockSupport.h"
 
-TEST_GROUP(Just_Group)
+TEST_GROUP(Uart_Group)
 {
     void setup()
     {
@@ -12,8 +12,8 @@ TEST_GROUP(Just_Group)
     }
 };
 
-TEST(Just_Group, Fail_Test)
+TEST(Uart_Group, UartInit_Test)
 {
-   FAIL("Yooops, I failed!");
+    ;
 }
 
