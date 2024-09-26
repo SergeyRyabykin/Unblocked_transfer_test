@@ -33,7 +33,7 @@ CPUFLAGS = -mthumb -mcpu=cortex-m3
 DEPFLAGS = -MT $@ -MMD -MF ${DEP_DIR}/$(*F).d
 DEFINES =
 WARNINGS = -Wall -Wextra
-OPTIMIZATION = -O1
+OPTIMIZATION = -O2
 DEBUG = -g
 OTHER = -fstack-usage -ffunction-sections -fdata-sections \
 -nostartfiles -nostdlib -nolibc -std=c89
