@@ -5,11 +5,13 @@
 extern "C" {
 #endif
 
-void nvic_enable_uart2_irq(void);
-void nvic_clear_uart2_irq(void);
+#define NVIC_UART2_IRQ_NUM 38
+#define NVIC_DMA1_CH1_IRQ_NUM 11
+#define NVIC_DMA1_CH7_IRQ_NUM 17
 
-void nvic_enable_dma1_ch7_irq(void);
-void nvic_clear_dma1_ch7_irq(void);
+void nvic_enable_irq(unsigned int irq_num, unsigned char priority);
+void nvic_clear_irq(unsigned int irq_num);
+
 
 #ifdef __cplusplus
 }

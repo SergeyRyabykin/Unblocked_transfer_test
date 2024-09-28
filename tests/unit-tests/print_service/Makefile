@@ -2,9 +2,9 @@
 SILENCE = @
 
 #---- Outputs ----#
-COMPONENT_NAME := ${PROJECT_NAME}
+COMPONENT_NAME := print_service
 #--- Inputs ----#
-PROJECT_HOME_DIR = .
+# PROJECT_HOME_DIR = .
 ifeq "$(CPPUTEST_HOME)" ""
 $(error The environment variable CPPUTEST_HOME is not set. \
 Set it to where cpputest is installed)
@@ -19,12 +19,14 @@ endif
 #
 # SRC_FILES specifies individual production
 # code files.
+
+SRC_FILES += ${PROJECT_HOME_DIR}/code/src/print_service.c
 #
 # SRC_DIRS specifies directories containing
 # production code C and CPP files.
 #
 INCLUDE_DIRS += ${INC_FOR_TEST}
-SRC_DIRS += ./code/src
+# SRC_DIRS += ./code/src
 
 # --- TEST_SRC_FILES and TEST_SRC_DIRS ---
 # Test files are always included in the build.
@@ -37,8 +39,8 @@ SRC_DIRS += ./code/src
 
 TEST_SRC_FILES += 
 TEST_SRC_DIRS += tests
-TEST_SRC_DIRS += tests/unit-tests
-TEST_SRC_DIRS += tests/unit-tests/Uart
+# TEST_SRC_DIRS += tests/unit-tests
+TEST_SRC_DIRS += tests/unit-tests/print_service
 
 
 # --- MOCKS_SRC_DIRS ---
@@ -46,7 +48,7 @@ TEST_SRC_DIRS += tests/unit-tests/Uart
 # mocks, stubs and fakes.  You can also just put them
 # in TEST_SRC_DIRS
 MOCKS_SRC_DIRS += tests/mocks
-# MOCKS_SRC_DIRS += tests/mocks/src
+MOCKS_SRC_DIRS += tests/mocks/src
 MOCKS_SRC_DIRS += tests/mocks/inc
 
 # Turn on CppUMock
@@ -73,9 +75,9 @@ INCLUDE_DIRS += tests/includes
 #
 # This is kind of a kludge, but it causes the
 # .o and .d files to be put under objs.
-CPPUTEST_OBJS_DIR = test-obj/common
+CPPUTEST_OBJS_DIR = test-obj/print_service
 
-CPPUTEST_LIB_DIR = test-lib/common
+CPPUTEST_LIB_DIR = test-lib/print_service
 
 # You may have to tweak these compiler flags
 #    CPPUTEST_WARNINGFLAGS - apply to C and C++
@@ -123,8 +125,8 @@ CPPUTEST_CXXFLAGS += --std=c++11
 CPPUTEST_CXXFLAGS += -Wno-c++98-compat-pedantic
 CPPUTEST_CXXFLAGS += -Wno-c++98-compat
 
-CPPUTEST_CXXFLAGS += -DSTM32F103xE -Wno-int-to-pointer-cast -DFOREVER='loop_count--'
-CPPUTEST_CFLAGS += -DSTM32F103xE -DFOREVER='loop_count--'
+CPPUTEST_CXXFLAGS += -DUNIT_TEST 
+CPPUTEST_CFLAGS += -DUNIT_TEST 
 # Coloroze output
 CPPUTEST_EXE_FLAGS += -c
 

@@ -1,5 +1,6 @@
 export PROJECT_NAME = elvees_test
 export CPPUTEST_HOME ?= /e/CProjects/cpputest
+export PROJECT_HOME_DIR = .
 
 CROSS_COMPILE ?= arm-none-eabi-
 CC = ${CROSS_COMPILE}gcc
@@ -89,6 +90,7 @@ prog: ${PROJECT_NAME}.elf
 
 .PHONY: debug
 debug:
+	openocd -f interface/stlink.cfg -f target/stm32f1x.cfg -c "program ${PROJECT_NAME}.elf verify exit reset"
 	python ${DEBUG_DIR}/debug.py ${DEBUG_DIR}/scenario.gdb
 
 .PHONY : print
@@ -99,9 +101,16 @@ print:
 .PHONY: test
 test:
 	+make -f CpputestMakefile
+	+make -f tests/unit-tests/print_service/Makefile
+
+.PHONY: test-serv
+test-serv:
+	+make -f tests/unit-tests/print_service/Makefile
 
 .PHONY: test-clean
 test-clean:
 	+make -f CpputestMakefile clean
 	rm -f *.exe
 	rm -f *.txt
+	rm -fr test-obj
+	rm -fr test-lib
