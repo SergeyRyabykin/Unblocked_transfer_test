@@ -1,4 +1,5 @@
 #include "led.h"
+#include "pin.h"
 #include "common.h"
 
 /* #define GPIO_CRL  (PORTE_BASE + GPIO_CRL_OFS)
@@ -17,8 +18,7 @@ void led_init(void)
     /* Enable pad */
     PORTE(GPIO_BSRR) = 1;
 
-    PORTE(GPIO_CRL) &= ~0xf;
-    PORTE(GPIO_CRL) |= 0x7;
+    pin_init(PORTE_BASE, 0, OUT_OD);
 }
 
 void led_on(void)

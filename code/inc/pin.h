@@ -9,7 +9,7 @@ extern "C" {
 
 typedef enum {
     IN_ANA = 0x0,
-    OUT_PP = 0x2,
+    OUT_PP = 0x3,
     IN_FLT = 0x4,
     OUT_OD = 0x7,
     IN_PD = 0x8,

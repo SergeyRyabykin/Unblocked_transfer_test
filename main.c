@@ -21,20 +21,19 @@ int main(void)
   /* nvic_enable_uart2_irq(); */
   nvic_enable_dma1_ch7_irq();
 
-
   while(1) {
     volatile unsigned long i = 0;
 
     for(i = 0; i < COUNT_VAL; ) {
       i++;
     }
-    /* uart_putc(0x30); */
-    led_toggle();
+
     if(DMA_READY == dma_print.status) {
       dma_start(&dma_print, string, 0x40004404, xstrlen(string));
     }
+    led_toggle();
+    __asm__ ("wfi");
   }
-
 
   return 0;
 }	
