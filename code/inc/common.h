@@ -31,7 +31,7 @@
 #define RCC(reg)      REG_VAL(RCC_BASE + reg##_OFS)
 #define PORTA(reg)    REG_VAL(PORTA_BASE + reg##_OFS)
 #define PORTE(reg)    REG_VAL(PORTE_BASE + reg##_OFS)
-#define DMA1(reg, ch) REG_VAL(DMA1_BASE + reg##_OFS + 0x20 * (ch - 1))
+#define DMA1(reg, ch) REG_VAL(DMA1_BASE + reg##_OFS + 20 * (ch - 1))
 #define DMA1_IFCR     REG_VAL(DMA1_BASE + DMA_IFCR_OFS)
 #define DMA1_ISR      REG_VAL(DMA1_BASE + DMA_ISR_OFS)
 

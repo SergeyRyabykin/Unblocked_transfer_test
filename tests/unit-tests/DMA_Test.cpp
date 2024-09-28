@@ -51,11 +51,11 @@ TEST(DMA_Group, DMAInit_Test)
     
 
     //Check the DMA channel settings
-    reg_addr = (uintptr_t)dma + 0x8 + (0x20 * (ctx.channel - 1));
+    reg_addr = (uintptr_t)dma + 0x8 + (20 * (ctx.channel - 1));
 
     CHECK_EQUAL(0, *((uint32_t *)reg_addr - 1));
     CHECK_EQUAL(0, *((uint32_t *)reg_addr + 1));
-    CHECK_EQUAL((2 << 10) | (1 << 7) | (1 << 4) | (1 << 3) | (1 << 1), *((uint32_t *)reg_addr));
+    CHECK_EQUAL((2 << 12) | (1 << 7) | (1 << 4) | (1 << 3) | (1 << 1), *((uint32_t *)reg_addr));
 
     CHECK_EQUAL(DMA_READY, ctx.status);
 }
@@ -77,11 +77,11 @@ TEST(DMA_Group, DMAInit_NoRegsCorruption_Test)
     CHECK_EQUAL(0xFFFFFFFF, *((uint32_t *)reg_addr + 1));
     CHECK_EQUAL(0xFFFFFFFF, *((uint32_t *)reg_addr));
 
-     reg_addr = (uintptr_t)dma + 0x8 + (0x20 * (ctx.channel - 1));
+     reg_addr = (uintptr_t)dma + 0x8 + (20 * (ctx.channel - 1));
 
     CHECK_EQUAL(0xFFFFFFFF, *((uint32_t *)reg_addr - 1));
     CHECK_EQUAL(0xFFFFFFFF, *((uint32_t *)reg_addr + 1));
-    CHECK_EQUAL((2 << 10) | (1 << 7) | (1 << 4) | (1 << 3) | (1 << 1), *((uint32_t *)reg_addr));
+    CHECK_EQUAL((2 << 12) | (1 << 7) | (1 << 4) | (1 << 3) | (1 << 1), *((uint32_t *)reg_addr));
 }
 
 TEST(DMA_Group, DMAStart_Test)
@@ -94,22 +94,22 @@ TEST(DMA_Group, DMAStart_Test)
     dma_start(chan_ctx, source, periph, size);
 
     // Check the peripheral is written to the correct register
-    uintptr_t reg_addr = (uintptr_t)dma + 0x10 + (0x20 * (ctx.channel - 1));
+    uintptr_t reg_addr = (uintptr_t)dma + 0x10 + (20 * (ctx.channel - 1));
 
     CHECK_EQUAL(periph, *((uint32_t *)reg_addr));
 
     // Check the memory address is written to the correct register
-    reg_addr = (uintptr_t)dma + 0x14 + (0x20 * (ctx.channel - 1));
+    reg_addr = (uintptr_t)dma + 0x14 + (20 * (ctx.channel - 1));
 
     CHECK_EQUAL(source, *((uint32_t *)reg_addr));
 
     // Check the data size is written to the correct register
-    reg_addr = (uintptr_t)dma + 0xc + (0x20 * (ctx.channel - 1));
+    reg_addr = (uintptr_t)dma + 0xc + (20 * (ctx.channel - 1));
 
     CHECK_EQUAL(size, *((uint32_t *)reg_addr));
 
     //Check the DMA channel is enabled
-    reg_addr = (uintptr_t)dma + 0x8 + (0x20 * (ctx.channel - 1));
+    reg_addr = (uintptr_t)dma + 0x8 + (20 * (ctx.channel - 1));
 
     CHECK_EQUAL(0xaaaaaaaa | 1, *((uint32_t *)reg_addr));
     CHECK_EQUAL(DMA_BUSY, ctx.status);
@@ -143,11 +143,11 @@ TEST(DMA_Group, DMAGetStatus_Test)
     CHECK_EQUAL(DMA_COMPL, status);
 
     *((uint32_t *)((uintptr_t)dma + 0x0)) = 0;
-    *((uint32_t *)((uintptr_t)dma + 0x8 + (0x20 * (ctx.channel - 1)))) = 1;
+    *((uint32_t *)((uintptr_t)dma + 0x8 + (20 * (ctx.channel - 1)))) = 1;
     status = dma_get_status(chan_ctx);
     CHECK_EQUAL(DMA_BUSY, status);
 
-    *((uint32_t *)((uintptr_t)dma + 0x8 + (0x20 * (ctx.channel - 1)))) = 0;
+    *((uint32_t *)((uintptr_t)dma + 0x8 + (20 * (ctx.channel - 1)))) = 0;
     status = dma_get_status(chan_ctx);
     CHECK_EQUAL(DMA_READY, status);
 
@@ -165,12 +165,12 @@ TEST(DMA_Group, DMAGetStatus_Test)
     CHECK_EQUAL(DMA_COMPL, status);
 
     *((uint32_t *)((uintptr_t)dma + 0x0)) = 0;
-    *((uint32_t *)((uintptr_t)dma + 0x8 + (0x20 * (5 - 1)))) = 1;
+    *((uint32_t *)((uintptr_t)dma + 0x8 + (20 * (5 - 1)))) = 1;
     status = dma_get_status(chan_ctx);
     CHECK_EQUAL(DMA_BUSY, ctx.status);
     CHECK_EQUAL(DMA_BUSY, status);
 
-    *((uint32_t *)((uintptr_t)dma + 0x8 + (0x20 * (5 - 1)))) = 0;
+    *((uint32_t *)((uintptr_t)dma + 0x8 + (20 * (5 - 1)))) = 0;
     status = dma_get_status(chan_ctx);
     CHECK_EQUAL(DMA_READY, ctx.status);
     CHECK_EQUAL(DMA_READY, status);
@@ -192,7 +192,7 @@ TEST(DMA_Group, DMAIrqHandler_Complete_Test)
 {
     *((uint32_t *)((uintptr_t)dma + 0x0)) = (1 << 25);
 
-    uintptr_t reg_addr = (uintptr_t)dma + 0x8 + (0x20 * (ctx.channel - 1));
+    uintptr_t reg_addr = (uintptr_t)dma + 0x8 + (20 * (ctx.channel - 1));
     *((uint32_t *)reg_addr) = 0xaaaaaaaa | 1;
 
     dma_handle_irq(chan_ctx);

@@ -3,7 +3,7 @@
 
 #define DMA1EN (1 << 0)
 
-#define CCR_PL    (2 << 10)
+#define CCR_PL    (2 << 12)
 #define CCR_MINC  (1 << 7)
 #define CCR_DIR   (1 << 4)
 #define CCR_TEIE  (1 << 3)
