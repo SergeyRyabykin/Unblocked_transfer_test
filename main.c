@@ -7,7 +7,7 @@
 int main(void) 
 {
   led_init();
-  uart_init();
+  uart_init_ti();
   nvic_enable_uart2_irq();
 
 

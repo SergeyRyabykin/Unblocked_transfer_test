@@ -14,12 +14,15 @@
 #define USART_BRR_OFS 0x8
 #define USART_CR1_OFS 0xC
 #define USART_CR2_OFS 0x10
+#define USART_CR3_OFS 0x14
 
 #define CR1_UE (1 << 13)
 #define CR1_TE (1 << 3)
 #define CR1_TCIE (1 << 6)
 
-void uart_init(void)
+#define CR3_DMAT (1 << 7)
+
+void uart_init_ti(void)
 {
     /* Enable clock */
     RCC(RCC_APB2ENR) |= IOPAEN | AFIOEN;
@@ -45,6 +48,36 @@ void uart_init(void)
 
     /* Enable transmitter */
     REG_VAL(USART2_BASE + USART_CR1_OFS) |= CR1_TE | CR1_TCIE;
+}
+
+void uart_init_dma(void)
+{
+    /* Enable clock */
+    RCC(RCC_APB2ENR) |= IOPAEN | AFIOEN;
+    RCC(RCC_APB1ENR) |= USART2EN;
+
+    /* TX - PA2 Alternate function push-pull */
+    PORTA(GPIO_CRL) &= ~(0xf << 8);
+    PORTA(GPIO_CRL) |= (0xB << 8);
+    /* RX - PA3 Input floating/Input pull-up */
+    PORTA(GPIO_CRL) &= ~(0xf << 12);
+    PORTA(GPIO_CRL) |= (0x4 << 12);
+
+    /* Enable USART2 */
+    REG_VAL(USART2_BASE + USART_CR1_OFS) |= CR1_UE;
+
+    /* The word length and stop bits are set by default values as 8 bit and 1 bit correspondingly*/
+
+    /* TODO: Add DMA initialization */
+    REG_VAL(USART2_BASE + USART_CR3_OFS) |= CR3_DMAT;
+
+
+    /* APB frequency must be 8MHz as the clock settings were not used 
+    so with these coefficients the baudrate must be 115200 */
+    REG_VAL(USART2_BASE + USART_BRR_OFS) = (4 << 4) | 5;
+
+    /* Enable transmitter */
+    REG_VAL(USART2_BASE + USART_CR1_OFS) |= CR1_TE;
 }
 
 void uart_putc(unsigned char s)
