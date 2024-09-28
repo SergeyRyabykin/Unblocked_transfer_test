@@ -12,7 +12,7 @@
 void led_init(void)
 {
     /* Enable clock */
-    RCC_APB2ENR |= IOPEEN;
+    RCC(RCC_APB2ENR) |= IOPEEN;
 
     /* Enable pad */
     PORTE(GPIO_BSRR) = 1;

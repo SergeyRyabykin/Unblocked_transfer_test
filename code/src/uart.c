@@ -22,8 +22,8 @@
 void uart_init(void)
 {
     /* Enable clock */
-    RCC_APB2ENR |= IOPAEN | AFIOEN;
-    RCC_APB1ENR |= USART2EN;
+    RCC(RCC_APB2ENR) |= IOPAEN | AFIOEN;
+    RCC(RCC_APB1ENR) |= USART2EN;
 
     /* TX - PA2 Alternate function push-pull */
     PORTA(GPIO_CRL) &= ~(0xf << 8);
