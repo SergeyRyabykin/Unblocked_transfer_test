@@ -27,6 +27,14 @@
 #define DMA_CPAR_OFS  0x10
 #define DMA_CMAR_OFS  0x14
 
+/* USART */
+#define USART_SR_OFS  0x0
+#define USART_DR_OFS  0x4
+#define USART_BRR_OFS 0x8
+#define USART_CR1_OFS 0xC
+#define USART_CR2_OFS 0x10
+#define USART_CR3_OFS 0x14
+
 /* Register access */
 #define RCC(reg)      REG_VAL(RCC_BASE + reg##_OFS)
 #define PORTA(reg)    REG_VAL(PORTA_BASE + reg##_OFS)

@@ -1,15 +1,11 @@
 #include "CppUTest/TestHarness.h"
 #include "dma.h"
 
-#include <iostream>
-
 #define RCC_AHBENR_OFFS 0x14
 #define DMA1EN (1 << 0)
 
 uintptr_t DMA1_BASE = 0;
 uintptr_t RCC_BASE = 0;
-
-extern "C" void DMA1_Channel7_IRQHandler(void);
 
 TEST_GROUP(DMA_Group)
 {

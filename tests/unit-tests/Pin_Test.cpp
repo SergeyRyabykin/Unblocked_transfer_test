@@ -1,6 +1,5 @@
 #include "CppUTest/TestHarness.h"
 #include "pin.h"
-// #include "CppUTestExt/MockSupport.h"
 
 constexpr uintptr_t CRL_OFFS = 0x0;
 constexpr uintptr_t CRH_OFFS = 0x4;

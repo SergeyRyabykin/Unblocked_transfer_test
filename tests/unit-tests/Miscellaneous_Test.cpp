@@ -2,8 +2,6 @@
 #include "miscellaneous.h"
 #include "string.h"
 
-
-
 TEST_GROUP(Miscellaneous_Group)
 {
     void setup()

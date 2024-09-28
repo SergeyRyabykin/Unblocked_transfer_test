@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+extern uintptr_t USART2_BASE;   
 extern uintptr_t RCC_BASE;   
 extern uintptr_t PORTA_BASE; 
 extern uintptr_t PORTE_BASE; 
