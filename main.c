@@ -31,7 +31,7 @@ int main(void)
     /* uart_putc(0x30); */
     led_toggle();
     if(DMA_READY == dma_print.status) {
-      dma_start(&dma_print, (uint32_t)string, 0x40004404, xstrlen(string));
+      dma_start(&dma_print, string, 0x40004404, xstrlen(string));
     }
   }
 

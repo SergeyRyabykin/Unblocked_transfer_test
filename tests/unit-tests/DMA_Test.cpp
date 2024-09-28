@@ -91,7 +91,7 @@ TEST(DMA_Group, DMAStart_Test)
     const uint16_t size = 0x8974;
 
     memset(dma, 0xaaaaaaaa, sizeof(dma));
-    dma_start(chan_ctx, source, periph, size);
+    dma_start(chan_ctx, (char *)source, periph, size);
 
     // Check the peripheral is written to the correct register
     uintptr_t reg_addr = (uintptr_t)dma + 0x10 + (20 * (ctx.channel - 1));
