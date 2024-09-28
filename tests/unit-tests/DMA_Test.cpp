@@ -111,6 +111,39 @@ TEST(DMA_Group, DMAStart_Test)
     CHECK_EQUAL(DMA_BUSY, ctx.status);
 }
 
+TEST(DMA_Group, DMAStart_Busy_Test)
+{
+    const uint32_t source = 0xdeadbeaf;
+    const uint32_t periph = 0x01020304;
+    const uint16_t size = 0x8974;
+
+    ctx.status = DMA_BUSY;
+
+    dma_start(chan_ctx, (char *)source, periph, size);
+
+    // Check the peripheral is written to the correct register
+    uintptr_t reg_addr = (uintptr_t)dma + 0x10 + (20 * (ctx.channel - 1));
+
+    CHECK_EQUAL(0, *((uint32_t *)reg_addr));
+
+    // Check the memory address is written to the correct register
+    reg_addr = (uintptr_t)dma + 0x14 + (20 * (ctx.channel - 1));
+
+    CHECK_EQUAL(0, *((uint32_t *)reg_addr));
+
+    // Check the data size is written to the correct register
+    reg_addr = (uintptr_t)dma + 0xc + (20 * (ctx.channel - 1));
+
+    CHECK_EQUAL(0, *((uint32_t *)reg_addr));
+
+    //Check the DMA channel is enabled
+    reg_addr = (uintptr_t)dma + 0x8 + (20 * (ctx.channel - 1));
+
+    CHECK_EQUAL(0, *((uint32_t *)reg_addr));
+
+    CHECK_EQUAL(DMA_BUSY, ctx.status);
+}
+
 TEST(DMA_Group, DMAClearIrqFlags_Test)
 {
     dma_clean_irq(chan_ctx);

@@ -29,6 +29,10 @@ void dma_m2p_init(dma_channel_ctx_t * const ctx)
 
 void dma_start(dma_channel_ctx_t * const ctx, char const * const source, uint32_t dest, uint16_t size)
 {
+    if(DMA_BUSY == ctx->status) {
+        return;
+    }
+    
     /* Set source address from the memory */
     DMA1(DMA_CMAR, ctx->channel) = (uint32_t)source;
 
