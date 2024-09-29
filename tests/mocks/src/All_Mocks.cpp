@@ -29,7 +29,7 @@ void dma_start(dma_channel_ctx_t * const ctx, char const * const source, uint32_
         .withParameter("ctx", ctx)
         .withParameter("ctx->channel", ctx->channel)
         .withParameter("ctx->status", ctx->status)
-        .withParameter("source", source)
+        .withPointerParameter("source", (void *)source)
         .withParameter("dest", dest)
         .withParameter("size", size);
 }

@@ -69,7 +69,7 @@ TEST(PrintService_Group, PutStr_Test)
     mock().expectOneCall("dma_start")
         .withParameter("ctx->channel", 7)
         .withParameter("ctx->status", DMA_READY)
-        .withParameter("source", str)
+        .withParameter("source", (void *)str)
         .withParameter("dest", dest)
         .withParameter("size", strlen(str))
         .ignoreOtherParameters();
@@ -111,7 +111,7 @@ TEST(PrintService_Group, PutStr_DataLengthIs1MB_Test)
     mock().expectOneCall("dma_start")
         .withParameter("ctx->channel", 7)
         .withParameter("ctx->status", DMA_READY)
-        .withParameter("source", long_str)
+        .withParameter("source", (void *)long_str)
         .withParameter("dest", dest)
         .withParameter("size", UINT16_MAX)
         .ignoreOtherParameters();
@@ -161,8 +161,6 @@ TEST(PrintService_Group, IRQHandler_LongString_Test)
     int num_irq_handler_calls = 1000000 / UINT16_MAX + 1;
     test_set_dma_channel_context_status(DMA_READY);
 
-    // TODO: Set str_position_g in print_service.c to send right source parameter
-
     mock().ignoreOtherCalls();
 
     mock().expectNCalls(num_irq_handler_calls, "nvic_clear_irq")
@@ -172,27 +170,29 @@ TEST(PrintService_Group, IRQHandler_LongString_Test)
         .withParameter("ctx", ctx)
         .ignoreOtherParameters();
 
-    // for(int i = 1; i < num_calls - 1; i++) {
-    //     mock().expectOneCall("dma_start")
-    //         .withParameter("ctx->channel", 7)
-    //         .withParameter("ctx->status", DMA_READY)
-    //         .withParameter("source", long_str + UINT16_MAX * i)
-    //         .withParameter("dest", dest)
-    //         .withParameter("size", UINT16_MAX)
-    //         .ignoreOtherParameters();
-    // }
+    for(int i = 0; i < num_irq_handler_calls - 1; i++) {
+        mock().expectOneCall("dma_start")
+            .withParameter("ctx->channel", 7)
+            .withParameter("ctx->status", DMA_READY)
+            .withParameter("source", (void *)(long_str + UINT16_MAX * i))
+            .withParameter("dest", dest)
+            .withParameter("size", UINT16_MAX)
+            .ignoreOtherParameters();
+    }
 
-    // mock().expectOneCall("dma_start")
-    //         .withParameter("ctx->channel", 7)
-    //         .withParameter("ctx->status", DMA_READY)
-    //         .withParameter("source", long_str + UINT16_MAX * num_calls)
-    //         .withParameter("dest", dest)
-    //         .withParameter("size", 0x424F)
-    //         .ignoreOtherParameters();
+    mock().expectOneCall("dma_start")
+            .withParameter("ctx->channel", 7)
+            .withParameter("ctx->status", DMA_READY)
+            .withParameter("source", (void *)(long_str + UINT16_MAX * (num_irq_handler_calls - 1)))
+            .withParameter("dest", dest)
+            .withParameter("size", 0x424F)
+            .ignoreOtherParameters();
 
+    mock().expectOneCall("xstrlen")
+        .withParameter("str", long_str)
+        .andReturnValue(1000000);
 
-
-    *data_length = 1000000;
+    put_str(long_str);
 
     do {
         DMA1_Channel7_IRQHandler();

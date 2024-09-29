@@ -12,10 +12,8 @@ static dma_channel_ctx_t ctx_g = {
     .status = DMA_UNINIT
 };
 
-static volatile int data_length_g;
+static volatile int32_t data_length_g;
 static volatile char *str_position_g;
-
-
 
 void print_service_init(void)
 {
@@ -32,7 +30,7 @@ ret_code_t put_str(char * str)
     if(DMA_READY == ctx_g.status) {
         data_length_g = xstrlen(str);
         if(0 < data_length_g) {
-            current_length = (UINT16_MAX < data_length_g) ? UINT16_MAX : data_length_g;
+            current_length = (DMA_MAX_DATA_LENGTH < data_length_g) ? DMA_MAX_DATA_LENGTH : data_length_g;
             str_position_g = str;
             dma_start(&ctx_g, str, USART2_BASE + USART_DR_OFS, current_length);
         }
@@ -46,13 +44,18 @@ ret_code_t put_str(char * str)
 
 void DMA1_Channel7_IRQHandler(void)
 {
+    uint16_t current_length = 0;
+
     nvic_clear_irq(NVIC_DMA1_CH7_IRQ_NUM);
     dma_handle_irq(&ctx_g);
-    
+
     data_length_g -= DMA_MAX_DATA_LENGTH;
 
     if(0 < data_length_g) {
-        dma_start(&ctx_g, (char *)str_position_g, USART2_BASE + USART_DR_OFS, data_length_g);
+        current_length = (DMA_MAX_DATA_LENGTH < data_length_g) ? DMA_MAX_DATA_LENGTH : data_length_g;
+        str_position_g += DMA_MAX_DATA_LENGTH;
+
+        dma_start(&ctx_g, (char *)str_position_g, USART2_BASE + USART_DR_OFS, current_length);
     }
 }
 
