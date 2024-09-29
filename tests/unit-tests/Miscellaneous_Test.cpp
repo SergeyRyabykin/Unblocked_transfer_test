@@ -33,7 +33,7 @@ TEST(Miscellaneous_Group, Xltrlen_Test)
         str1_len_x = xstrlen(long_str);
 
         CHECK_EQUAL(2000000, str1_len_lib);
-        CHECK_EQUAL(1000000, str1_len_x);
+        CHECK_EQUAL(str1_len_lib, str1_len_x);
 
         delete[] long_str;
     }

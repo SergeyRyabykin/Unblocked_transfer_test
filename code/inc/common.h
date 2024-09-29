@@ -12,6 +12,9 @@
 #define RCC_APB2RSTR_OFS 0xC
 #define RCC_AHBENR_OFS   0x14
 
+#define USART2EN (1 << 17)
+#define IOPAEN   (1 << 2)
+
 /* GPIO */
 #define GPIO_CRL_OFS  0x0
 #define GPIO_CRH_OFS  0x4

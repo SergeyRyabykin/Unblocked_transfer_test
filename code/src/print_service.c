@@ -6,6 +6,7 @@
 #include "common.h"
 
 #define DMA_MAX_DATA_LENGTH UINT16_MAX
+#define MAX_STR_LENGTH 1000000
 
 static dma_channel_ctx_t ctx_g = {
     .channel = 7,
@@ -24,22 +25,25 @@ void print_service_init(void)
 
 ret_code_t put_str(char * str)
 {
-    ret_code_t ret = OK;
     uint16_t current_length = 0;
 
-    if(DMA_READY == ctx_g.status) {
-        data_length_g = xstrlen(str);
-        if(0 < data_length_g) {
-            current_length = (DMA_MAX_DATA_LENGTH < data_length_g) ? DMA_MAX_DATA_LENGTH : data_length_g;
-            str_position_g = str;
-            dma_start(&ctx_g, str, USART2_BASE + USART_DR_OFS, current_length);
-        }
-    }
-    else {
-        ret = ERR;
+    if(DMA_READY != ctx_g.status) {
+        return ERR;
     }
 
-    return ret;
+    data_length_g = xstrlen(str);
+
+    if(MAX_STR_LENGTH < data_length_g) {
+        data_length_g = MAX_STR_LENGTH;
+    }
+
+    if(0 < data_length_g) {
+        current_length = (DMA_MAX_DATA_LENGTH < data_length_g) ? DMA_MAX_DATA_LENGTH : data_length_g;
+        str_position_g = str;
+        dma_start(&ctx_g, str, USART2_BASE + USART_DR_OFS, current_length);
+    }
+    
+    return OK;
 }
 
 void DMA1_Channel7_IRQHandler(void)

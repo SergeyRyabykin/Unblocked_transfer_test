@@ -5,12 +5,36 @@
 
 #define COUNT_VAL 0xfffff
 
-#define USART2EN (1 << 17)
-#define IOPAEN   (1 << 2)
+static const char * string = "Hello from the DMA1 and UART2 to test unblocked data transfer.\n";
 
-static const char * string = "Hello from the DMA1\n";
+static void pin_config(void);
 
 int main(void) 
+{
+  pin_config();
+  print_service_init();
+
+  while(1) {
+    volatile unsigned long i = 0;
+
+    /* Pause */
+    for(i = 0; i < COUNT_VAL; i++) {}
+
+    put_str((char *)string);
+
+    __asm__ ("wfi");
+  }
+
+  return 0;
+}	
+
+void SystemInit(void)
+{
+  /* Just a stub to satisfy startup file */
+  /* There must be clock settings but the clock remains 8 MHz */
+}
+
+static void pin_config(void)
 {
   /* Enable PORTA clocking */
   RCC(RCC_APB2ENR) |= IOPAEN;
@@ -20,37 +44,5 @@ int main(void)
   pin_init(PORTA_BASE, 2, ALT_PP);
   /* RX - PA3 Input floating/Input pull-up */
   pin_init(PORTA_BASE, 3, IN_FLT);
-
-  led_init();
-  print_service_init();
- 
-
-  while(1) {
-    volatile unsigned long i = 0;
-
-    for(i = 0; i < COUNT_VAL; ) {
-      i++;
-    }
-    /* uart_putc(USART2_BASE, 0x31); */
-    put_str((char *)string);
-    
-    led_toggle();
-    __asm__ ("wfi");
-  }
-
-  return 0;
-}	
-
-void SystemInit(void)
-{
-  ;
 }
-
-
-/* void USART2_IRQHandler(void)
-{
-  nvic_clear_uart2_irq();
-  uart_clear_irq(USART2_BASE);
-  led_toggle();
-} */
 
