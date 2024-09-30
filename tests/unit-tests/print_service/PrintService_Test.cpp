@@ -15,6 +15,7 @@ extern "C" void test_set_dma_channel_context_status(dma_status_t status);
 extern "C" int *test_get_data_length_g_ptr(void);
 extern "C" void DMA1_Channel7_IRQHandler(void);
 
+uintptr_t RCC_BASE = 0;
 
 TEST_GROUP(PrintService_Group)
 {
@@ -24,6 +25,7 @@ TEST_GROUP(PrintService_Group)
     int *data_length = NULL;
     uint32_t dest = USART2_BASE + USART_DR_OFS;
     char * long_str = NULL;
+    uint32_t rcc[400/sizeof(uint32_t)];
 
 
     void setup()
@@ -31,6 +33,7 @@ TEST_GROUP(PrintService_Group)
         data_length = test_get_data_length_g_ptr();
         ctx = test_get_dma_channel_context_ptr();
         long_str = new char[2000001];
+        RCC_BASE = (uintptr_t)rcc;
     }
 
     void teardown()
@@ -56,6 +59,11 @@ TEST(PrintService_Group, PrintServiceInit_Test)
         .withParameter("priority", 1);
 
     print_service_init();
+
+    // Check the clocking is enabled
+    uintptr_t reg_addr = (uintptr_t)rcc + RCC_APB1ENR_OFS;
+
+    CHECK_EQUAL(USART2EN, *((uint32_t *)reg_addr));
 }
 
 TEST(PrintService_Group, PutStr_Test)

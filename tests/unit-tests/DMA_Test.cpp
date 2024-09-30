@@ -44,8 +44,6 @@ TEST(DMA_Group, DMAInit_Test)
     CHECK_EQUAL(0, *((uint32_t *)reg_addr + 1));
     CHECK_EQUAL(DMA1EN, *((uint32_t *)reg_addr));
 
-    
-
     //Check the DMA channel settings
     reg_addr = (uintptr_t)dma + 0x8 + (20 * (ctx.channel - 1));
 
