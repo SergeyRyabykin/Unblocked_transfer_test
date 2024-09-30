@@ -22,7 +22,7 @@
   *
   * This software component is licensed by ST under BSD 3-Clause license,
   * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
+  * License. You may obtain a copy of the License at:`
   *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
@@ -94,7 +94,7 @@ LoopFillZerobss:
 /* Call the clock system intitialization function.*/
     bl  SystemInit
 /* Call static constructors */
-    bl __libc_init_array
+    # bl __libc_init_array
 /* Call the application's entry point.*/
   bl main
   bx lr

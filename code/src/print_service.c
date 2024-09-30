@@ -18,8 +18,11 @@ static volatile char *str_position_g;
 
 void print_service_init(void)
 {
-    dma_m2p_init(&ctx_g);
+    /* Enable USART2 clocking */
+    RCC(RCC_APB1ENR) |= USART2EN;
     uart_init(USART2_BASE, USART_MODE_DMA);
+
+    dma_m2p_init(&ctx_g);
     nvic_enable_irq(NVIC_DMA1_CH7_IRQ_NUM, 1);
 }
 

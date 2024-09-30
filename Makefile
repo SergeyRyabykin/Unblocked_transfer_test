@@ -42,7 +42,7 @@ OTHER = -fstack-usage -ffunction-sections -fdata-sections \
 -nostartfiles -nostdlib -nolibc -std=c89
 
 CFLAGS = $(addprefix -I,${INCLUDES}) ${CPUFLAGS} ${DEPFLAGS} ${DEFINES} ${WARNINGS} ${OPTIMIZATION} ${DEBUG}  ${OTHER} 
-LDFLAGS = ${CPUFLAGS} -T${LINKER_SCRIPT} -Xlinker -Map=${PROJECT_NAME}.map -static -Wl,--gc-sections -lc
+LDFLAGS = ${CPUFLAGS} -T${LINKER_SCRIPT} -Xlinker -Map=${PROJECT_NAME}.map -static -Wl,--gc-sections -nostartfiles -nostdlib -nolibc -std=c89
 
 OBJECTS = $(CODE_SOURCES:%.c=%.o)
 EXT_C_DEP_OBJS = $(C_SOURCES:%.c=%.o)
@@ -90,7 +90,7 @@ prog: ${PROJECT_NAME}.elf
 
 .PHONY: debug
 debug:
-	openocd -f interface/stlink.cfg -f target/stm32f1x.cfg -c "program ${PROJECT_NAME}.elf verify exit reset"
+	@MAKE prog
 	python ${DEBUG_DIR}/debug.py ${DEBUG_DIR}/scenario.gdb
 
 .PHONY: test

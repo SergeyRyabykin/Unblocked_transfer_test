@@ -38,8 +38,7 @@ static void pin_config(void)
 {
   /* Enable PORTA clocking */
   RCC(RCC_APB2ENR) |= IOPAEN;
-  /* Enable USART2 clocking */
-  RCC(RCC_APB1ENR) |= USART2EN;
+  
   /* TX - PA2 Alternate function push-pull */
   pin_init(PORTA_BASE, 2, ALT_PP);
   /* RX - PA3 Input floating/Input pull-up */
