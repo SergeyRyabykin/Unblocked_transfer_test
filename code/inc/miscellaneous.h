@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "stddef.h"
+#include <stddef.h>
 
 size_t xstrlen(char const * const str);
 

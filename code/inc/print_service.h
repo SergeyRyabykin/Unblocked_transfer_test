@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "stdint.h"
+#include <stdint.h>
 #include "ret_code.h"
 
 void print_service_init(void);
