@@ -45,7 +45,6 @@ CFLAGS = $(addprefix -I,${INCLUDES}) ${CPUFLAGS} ${DEPFLAGS} ${DEFINES} ${WARNIN
 LDFLAGS = ${CPUFLAGS} -T${LINKER_SCRIPT} -Xlinker -Map=${PROJECT_NAME}.map -static -Wl,--gc-sections -nostartfiles -nostdlib -nolibc -std=c89
 
 OBJECTS = $(CODE_SOURCES:%.c=%.o)
-EXT_C_DEP_OBJS = $(C_SOURCES:%.c=%.o)
 
 all: ${PROJECT_NAME}.hex
 
@@ -54,14 +53,11 @@ ${PROJECT_NAME}.hex: ${PROJECT_NAME}.elf
 	${SIZE} $<
 	${OBJDUMP} -D $< > ${PROJECT_NAME}.asm
 
-${PROJECT_NAME}.elf: ${OBJECTS}  ${EXT_C_DEP_OBJS} startup_stm32f103xe.o
+${PROJECT_NAME}.elf: ${OBJECTS} startup_stm32f103xe.o
 	${CC} ${LDFLAGS} $(addprefix ${OBJ_DIR}/, $(notdir $^)) -o $@
 
 ${OBJECTS}: %.o: %.c | ${OBJ_DIR} ${DEP_DIR}
 	${CC} ${CFLAGS} ${CPPFLAGS} -c $< -o ${OBJ_DIR}/$@
-
- ${EXT_C_DEP_OBJS}: %.o: %.c | ${OBJ_DIR} ${DEP_DIR}
-	${CC} ${CFLAGS} -c $< -o ${OBJ_DIR}/$@
 
 startup_stm32f103xe.o: startup_stm32f103xe.s | ${OBJ_DIR}
 	${CC} ${CFLAGS} -c $< -o ${OBJ_DIR}/$@
